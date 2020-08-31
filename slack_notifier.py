@@ -7,9 +7,10 @@ import locale
 
 Books = List[libra_scraper.lending_book]
 class slack_notifier:
-    def __init__(self, books: Books)->str:
+    def __init__(self, url:str, books: Books)->str:
         locale.setlocale(locale.LC_TIME, 'ja_JP.UTF-8')
         self.json = dict()
+        self.url = url
         blocks = list()
         blocks.append( { 
             'type': 'section', 
@@ -39,6 +40,19 @@ class slack_notifier:
         blocks.append({'type': 'divider'})            
         self.json['blocks'] = blocks
         
-    def notify(self, url: str):
+    def notify(self):
+
         json_data = json.dumps(self.json)
-        result = requests.post(url, json_data, headers={'Content-Type': 'application/json'})
+        result = requests.post(self.url, json_data, headers={'Content-Type': 'application/json'})
+    
+    def message(self, message):
+        json_data = dict()
+        blocks = list()
+        blocks.append( { 
+            'type': 'section', 
+            'text': {
+                'type': 'mrkdwn', 
+                'text' : message
+            }})
+        json_data['blocks'] = blocks
+        result = requests.post(self.url, json.dumps(json_data), headers={'Content-Type': 'application/json'})

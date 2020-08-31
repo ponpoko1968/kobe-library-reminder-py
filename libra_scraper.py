@@ -41,3 +41,16 @@ class libra_scraper():
                 #print('|'.join([book_title,'{}'.format(is_extendable(_is_extendable)), datetime.datetime.strftime(due_date, '%y/%m/%d')]))
                 lending_books.append(lending_book(book_title, due_date, author, publisher,is_extendable, is_reserved.text, is_extended, misc.text))
         return (True, lending_books)
+
+class dummy_scraper1():
+    def login(self, user_name: str, password:str):
+        browser = ms.StatefulBrowser(user_agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.135 Safari/537.36")
+        browser.set_verbose(1)
+        login_page = browser.open("https://www.lib.city.kobe.jp/opac/opacs/lending_display")
+        login_form = browser.select_form()
+        login_form.input({'user[login]': user_name, 'user[passwd]': password, "act_login": 'ログイン'})
+        list_page: ms.Browser.submit = browser.submit_selected()
+        return list_page
+
+    def parse_list(self, list_page)->(bool, list):
+        return (True, [])
