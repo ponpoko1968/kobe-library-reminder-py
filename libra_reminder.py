@@ -2,6 +2,7 @@ import os
 import logging
 import http.client
 import libra_scraper
+from slack_notifier import slack_notifier
 
 logging.basicConfig(level=logging.DEBUG)
 
@@ -28,7 +29,11 @@ def main():
     requests_log.setLevel(logging.DEBUG)
     requests_log.propagate = True
     l = libra_scraper.libra_scraper()
-    l.login(os.getenv('LIBRA_REMINDER_USER'),os.getenv('LIBRA_REMINDER_PASSWD'))
+    page = l.login(os.getenv('LIBRA_REMINDER_USER'),os.getenv('LIBRA_REMINDER_PASSWD'))
+    (result, book_list) = l.parse_list(page)
+    if result:
+        notifier = slack_notifier(book_list)
+        notifier.notify(os.getenv('LIBRA_REMINDER_SLACK_URL'))
 
 if __name__ == "__main__":
     main()
