@@ -39,6 +39,7 @@ class slack_notifier:
             })
         blocks.append({'type': 'divider'})            
         self.json['blocks'] = blocks
+        self.json['text'] = '*返却期限が近づいている資料があります*'
         
     def notify(self):
 
@@ -54,5 +55,6 @@ class slack_notifier:
                 'type': 'mrkdwn', 
                 'text' : message
             }})
+        json_data['text'] = message
         json_data['blocks'] = blocks
         result = requests.post(self.url, json.dumps(json_data), headers={'Content-Type': 'application/json'})
