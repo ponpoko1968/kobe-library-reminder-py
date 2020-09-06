@@ -39,7 +39,7 @@ class slack_notifier:
             })
         blocks.append({'type': 'divider'})            
         self.json['blocks'] = blocks
-        self.json['text'] = '*返却期限が近づいている資料があります*'
+        self.json['text'] = '返却期限が近づいている資料があります'
         
     def notify(self):
 
